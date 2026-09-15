@@ -20,7 +20,7 @@ jobs:
       - name: Download & Install Dependencies
         run: npm ci
       - name: Test Code
-        run: npm run Test
+        run: npm run test
       - name: What Is App Name?
         run: echo $APP_NAME
       - name: What Is App Version?
@@ -42,7 +42,7 @@ jobs:
       - name: Downlad & Install Dependencies
         run: npm ci
       - name: Build Code
-        run: npm run Build
+        run: npm run build
       - name: Publish JS File Name
         id: publish
         run: find dist/assets/*.js -type f -execdir echo ::set-output name=script-file-name::'{}'
