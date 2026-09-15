@@ -1,0 +1,75 @@
+name: CI CD Work flow
+on:
+  push:
+    branches: main
+env:
+  APP_NAME: HelloMyFriend
+  APP_VERSION: 1.2.3
+
+jobs:
+  test:
+    runs-on: ubuntu-lates
+    steps:
+      - name: Download Code
+        uses: actions/checkout@v6
+      - name: Cache Dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: node-deps-cache-with-hash-${{ hashFile('**/package-lock.json') }}
+      - name: Download & Install Dependencies
+        run: npm ci
+      - name: Test Code
+        run: npm run Test
+      - name: What Is App Name?
+        run: echo $APP_NAME
+      - name: What Is App Version?
+        run: echo $APP_VERSION
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      script-file-name: ${{ steps.publish.outputs.script-file-name }}
+    steps:
+      - name: Download Code
+        uses: actions/checkout@v6
+      - name: Cache Dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: node-deps-cache-with-hash-${{ hashFile('**/package-lock.json') }}
+      - name: Downlad & Install Dependencies
+        run: npm ci
+      - name: Build Code
+        run: npm run Build
+      - name: Publish JS File Name
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo ::set-output name=script-file-name::'{}'
+      - name: Upload Builded Files
+        uses: actions/upload-artifacts@v7
+        with:
+          name: BuildedFiles
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: What Is File Name In Previus Job?
+        run: echo "file name is:" "${{ needs.build.publish.outputs.script-file-name }}"
+      - name: Download Code
+        uses: actions/checkout@v6
+      - name: Cache Dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: node-deps-cache-with-hash-${{ hashFile('**/package-lock.json') }}
+      - name: Downlad & Install Dependencies
+        run: npm ci
+      - name: Download Builded Files
+        uses: actions/download-artifacts@v8
+        with:
+          name: BuildedFiles
+      - name: Show What Files We have
+        run: ls
