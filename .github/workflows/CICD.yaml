@@ -45,7 +45,7 @@ jobs:
         run: npm run build
       - name: Publish JS File Name
         id: publish
-        run: find dist/assets/*.js -type f -execdir echo ::set-output name=script-file-name::'{}'
+        run: find dist/assets/*.js -type f -execdir echo ::set-output name=script-file-name::'{}' ';'
       - name: Upload Builded Files
         uses: actions/upload-artifact@v7
         with:
