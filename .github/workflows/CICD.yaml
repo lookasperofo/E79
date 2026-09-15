@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: What Is File Name In Previus Job?
-        run: echo "file name is: ${{ needs.build.publish.outputs.script-file-name }}"
+        run: echo "file name is: ${{ needs.build.outputs.script-file-name }}"
       - name: Download Code
         uses: actions/checkout@v6
       - name: Cache Dependencies
