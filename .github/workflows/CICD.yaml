@@ -16,7 +16,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.npm
-          key: node-deps-cache-with-hash-${{ hashFile('**/package-lock.json') }}
+          key: node-deps-cache-with-hash-${{ hashFiles('**/package-lock.json') }}
       - name: Download & Install Dependencies
         run: npm ci
       - name: Test Code
