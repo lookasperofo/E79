@@ -24,7 +24,7 @@ jobs:
       - name: What Is App Name?
         run: echo $APP_NAME
       - name: What Is App Version?
-        run: echo $APP_VERSION
+        run: echo $APP_VERSION 
 
   build:
     needs: test
